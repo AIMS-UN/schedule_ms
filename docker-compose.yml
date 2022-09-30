@@ -1,0 +1,40 @@
+version: "3.1"
+name: "aims_schedule"
+
+services:
+  aims_schedule_db:
+    image: "postgres:14"
+    container_name: aims_schedule_db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=aims
+      - POSTGRES_PASSWORD=aims
+      - POSTGRES_DB=aims_schedule_db
+    volumes:
+      - database:/var/lib/postgresql/data
+    networks:
+      - schedule_network
+  aims_schedule_ms:
+    build: .
+    # restart: always
+    image: aims_schedule_ms
+    container_name: aims_schedule_ms
+    environment:
+      - PORT=4000
+      - DB_HOST=aims_schedule_db
+      - DB_PORT=5432
+      - DB_USER=aims
+      - DB_PASS=aims
+      - DB_NAME=aims_schedule_db
+    ports:
+      - "3000:4000"
+    depends_on:
+      - aims_schedule_db
+    networks:
+      - schedule_network
+volumes:
+  database:
+networks:
+  schedule_network:
+    driver: bridge
