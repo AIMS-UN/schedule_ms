@@ -13,7 +13,7 @@ import (
 // Find a schedules by user_id
 func FindSchedules(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
-	var schedules []model.Enrrollment
+	var schedules []model.Enrollment
 	if err := db.Where("user_id = ?", c.Param("user_id")).Find(&schedules).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"data": "User id not found"})
 		return
@@ -26,7 +26,7 @@ func FindSchedules(c *gin.Context) {
 func FindSchedule(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	// Get model if exist
-	var schedule model.Enrrollment
+	var schedule model.Enrollment
 	if err := db.Where("user_id = ? AND semester = ?", c.Param("user_id"), c.Param("semester")).First(&schedule).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"data": "Record not found!"})
 		return
