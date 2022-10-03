@@ -1,40 +1,36 @@
-version: "3.1"
-name: "aims_schedule"
+version: "3.8"
+name: aims
 
 services:
-  aims_schedule_db:
-    image: "postgres:14"
-    container_name: aims_schedule_db
-    ports:
-      - "5433:5432"
+  enrollment_db:
+    image: postgres:latest
+    container_name: enrollment_db
     environment:
+      - POSTGRES_DB=enrollments
       - POSTGRES_USER=aims
       - POSTGRES_PASSWORD=aims
-      - POSTGRES_DB=aims_schedule_db
+    ports:
+      - "5432:5432"
     volumes:
-      - database:/var/lib/postgresql/data
-    networks:
-      - schedule_network
-  aims_schedule_ms:
+      - enrollment:/var/lib/postgresql/data
+
+  schedule_ms:
     build: .
-    # restart: always
     image: aims_schedule_ms
-    container_name: aims_schedule_ms
+    container_name: schedule_ms
+    depends_on:
+      - enrollment_db
+    links:
+      - enrollment_db
     environment:
       - PORT=4000
-      - DB_HOST=aims_schedule_db
+      - DB_HOST=enrollment_db
       - DB_PORT=5432
       - DB_USER=aims
       - DB_PASS=aims
-      - DB_NAME=aims_schedule_db
+      - DB_NAME=enrollments
     ports:
-      - "3000:4000"
-    depends_on:
-      - aims_schedule_db
-    networks:
-      - schedule_network
+      - "4001:4000"
+
 volumes:
-  database:
-networks:
-  schedule_network:
-    driver: bridge
+  enrollment:
