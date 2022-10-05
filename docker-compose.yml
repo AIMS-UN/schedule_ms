@@ -2,7 +2,7 @@ version: "3.8"
 name: aims
 
 services:
-  enrollment_db:
+  enrollment-db:
     image: postgres:latest
     container_name: enrollment_db
     environment:
@@ -12,19 +12,19 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - enrollment:/var/lib/postgresql/data
+      - enrollment_db_data:/var/lib/postgresql/data
 
-  schedule_ms:
+  schedule-ms:
     build: .
     image: aims_schedule_ms
     container_name: schedule_ms
     depends_on:
-      - enrollment_db
+      - enrollment-db
     links:
-      - enrollment_db
+      - enrollment-db
     environment:
       - PORT=4000
-      - DB_HOST=enrollment_db
+      - DB_HOST=enrollment-db
       - DB_PORT=5432
       - DB_USER=aims
       - DB_PASS=aims
@@ -33,4 +33,4 @@ services:
       - "4001:4000"
 
 volumes:
-  enrollment:
+  enrollment_db_data:
