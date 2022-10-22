@@ -25,14 +25,14 @@ func SetupModels() *gorm.DB {
 	db.AutoMigrate(&model.Enrollment{})
 
 	// check if migration is successful
-	if db.HasTable(&model.Enrollment{}) {
-		fmt.Println("Enrollment table created")
-	} else {
-		fmt.Println("Enrollment table not created")
-	}
+	// if db.HasTable(&model.Enrollment{}) {
+	// 	fmt.Println("Enrollment table created")
+	// } else {
+	// 	fmt.Println("Enrollment table not created")
+	// }
 
-	// Initialise value
-	m := model.Enrollment{Enrollment_id: 1, Final_grade: 3.6, Semester: "2021-1", User_id: "U2342UDTdsa3254sfs3423", Group_id: "3", Subject_id: "56"}
-	db.Create(&m)
+	// // Initialise value
+	// m := model.Enrollment{Enrollment_id: 1, Final_grade: 3.6, Semester: "2021-1", User_id: "U2342UDTdsa3254sfs3423", Group_id: "3", Subject_id: "56"}
+	// db.Create(&m)
 	return db
 }
